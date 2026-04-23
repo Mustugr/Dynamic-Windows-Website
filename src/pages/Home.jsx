@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Hero from '../components/Hero'
 import MarqueeStrip from '../components/MarqueeStrip'
+import LandingAnimation from '../components/LandingAnimation'
 
 const featured = [
   { name: '646 11th Avenue', location: 'New York, NY', img: '/assets/projects/646-11th-ave.webp', type: 'Curtain Wall' },
@@ -19,6 +20,7 @@ const servicesTeaser = [
 export default function Home() {
   return (
     <main>
+      <LandingAnimation />
       <Hero />
 
       <MarqueeStrip />

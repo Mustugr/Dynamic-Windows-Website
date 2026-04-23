@@ -275,6 +275,240 @@
   }
 }
 
+/* ========================================================================
+   LANDING INTRO — construction sequence (home refresh only).
+   SVG core is SMIL-animated in-component; this file styles the overlay
+   shell, curtain halves, meta text, progress bar, and phase status.
+   ======================================================================== */
+
+.la-root {
+  background: #000;
+  overflow: hidden;
+}
+
+/* Curtain halves — split apart on exit to reveal the page */
+.la-curtain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, #060606, #0A0A0A);
+  z-index: 0;
+  transform: translateY(0);
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.la-curtain-top {
+  top: 0;
+  box-shadow: 0 1px 0 rgba(240,122,16,0.35);
+}
+.la-curtain-bottom {
+  bottom: 0;
+  box-shadow: 0 -1px 0 rgba(240,122,16,0.35);
+}
+.la-exit .la-curtain-top    { transform: translateY(-100%); }
+.la-exit .la-curtain-bottom { transform: translateY(100%); }
+
+/* Stage — sits between the curtains, holds the SVG and text layers. */
+.la-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.4s ease-out 0.45s;
+}
+.la-exit .la-stage { opacity: 0; }
+
+/* Ambient background */
+.la-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center 58%, rgba(240,122,16,0.1) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* Fine technical grid */
+.la-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(240,122,16,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,122,16,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
+  animation: laGridIn 1s ease-out forwards;
+}
+@keyframes laGridIn { to { opacity: 0.55; } }
+
+.la-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 2;
+}
+
+/* ----- Corner meta blocks ----- */
+.la-meta {
+  position: absolute;
+  padding: 32px 40px;
+  color: rgba(255,255,255,0.6);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0;
+  z-index: 3;
+  animation: laFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+}
+.la-meta-tl { top: 0; left: 0; }
+.la-meta-tr { top: 0; right: 0; text-align: right; animation-delay: 0.55s; }
+.la-meta-row {
+  color: #F07A10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.la-meta-tr .la-meta-row { justify-content: flex-end; }
+.la-meta-sub {
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+.la-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #F07A10;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #F07A10;
+  animation: laPulseDot 1.6s ease-in-out infinite;
+}
+@keyframes laPulseDot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+@keyframes laFadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----- Floor counter (bottom-left) ----- */
+.la-counter {
+  position: absolute;
+  left: 40px;
+  bottom: 112px;
+  z-index: 3;
+  opacity: 0;
+  animation: laFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.1s forwards;
+}
+.la-counter-label {
+  color: rgba(255,255,255,0.4);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.la-counter-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+  color: #F07A10;
+  text-shadow: 0 0 12px rgba(240,122,16,0.35);
+  font-variant-numeric: tabular-nums;
+}
+.la-counter-sep {
+  color: rgba(255,255,255,0.3);
+  padding: 0 2px;
+}
+
+/* ----- Phase status (bottom-center) ----- */
+.la-status {
+  position: absolute;
+  left: 50%;
+  bottom: 112px;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: rgba(255,255,255,0.55);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+.la-step {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+}
+.la-step-1 { animation: laFadeHoldFade 1.2s ease 100ms forwards; }
+.la-step-2 { animation: laFadeHoldFade 1.1s ease 1300ms forwards; }
+.la-step-3 { animation: laFadeHoldFade 1.3s ease 2300ms forwards; }
+.la-step-4 {
+  color: #F07A10;
+  animation: laFadeIn 0.4s ease 3600ms forwards;
+}
+@keyframes laFadeHoldFade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes laFadeIn {
+  to { opacity: 1; }
+}
+
+/* ----- Progress bar (bottom) ----- */
+.la-progress {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  z-index: 3;
+  opacity: 0;
+  animation: laFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+}
+.la-progress-track {
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.la-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: linear-gradient(90deg, #D4660D, #F07A10, #FFB067);
+  box-shadow: 0 0 8px rgba(240,122,16,0.6);
+  animation: laProgress 2.6s cubic-bezier(0.22, 1, 0.36, 1) 1.4s forwards;
+}
+@keyframes laProgress {
+  to { width: 100%; }
+}
+.la-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.la-progress-pct {
+  color: #F07A10;
+  min-width: 40px;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Reduced-motion safety */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
