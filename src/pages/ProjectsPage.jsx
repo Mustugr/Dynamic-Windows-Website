@@ -232,7 +232,8 @@ export default function ProjectsPage() {
             {filtered.map((project, i) => (
               <div
                 key={project.name}
-                className={`relative overflow-hidden cursor-pointer group bg-ink-900 aspect-[4/3] reveal d-${Math.min(i % 6 + 1, 6)}`}
+                className="relative overflow-hidden cursor-pointer group bg-ink-900 aspect-[4/3] animate-fade-up"
+                style={{ animationDelay: `${Math.min(i * 40, 240)}ms` }}
                 onClick={() => setLightbox(project)}
               >
                 <img

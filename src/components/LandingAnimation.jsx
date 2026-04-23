@@ -14,7 +14,12 @@ import { createPortal } from 'react-dom'
  *   - Clean curtain-split reveal instead of a flat fade
  */
 
-let hasPlayed = false
+// The intro should ONLY play when the browser actually loaded the home page
+// (fresh visit or refresh of "/"). If the module first loads on any other
+// route (e.g. user refreshed /about, or typed /contact), we mark the intro
+// as already-played so clicking the home link later does not trigger it.
+let hasPlayed =
+  typeof window !== 'undefined' && window.location.pathname !== '/'
 
 // Tighter pacing — on slower devices (phones) the longer the intro runs
 // the more chance the user has to notice the overlay sitting in place.

@@ -146,9 +146,10 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-ink-700">
             {services.map((s, i) => (
-              <div
+              <Link
                 key={s.title}
-                className={`relative bg-ink-900 p-8 md:p-10 group hover:bg-ink-800 transition-all duration-500 overflow-hidden reveal d-${Math.min(i + 1, 8)}`}
+                to="/contact"
+                className={`relative block bg-ink-900 p-8 md:p-10 group hover:bg-ink-800 transition-all duration-500 overflow-hidden reveal d-${Math.min(i + 1, 8)}`}
               >
                 {/* Orange hover bar */}
                 <div className="absolute top-0 left-0 h-0.5 w-0 group-hover:w-full bg-orange transition-all duration-700" />
@@ -178,13 +179,13 @@ export default function ServicesPage() {
                   </ul>
 
                   <div className="flex items-center gap-2 text-orange opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                    <span className="text-[10px] tracking-[0.3em] uppercase font-semibold">Inquire</span>
+                    <span className="text-[10px] tracking-[0.3em] uppercase font-semibold">Get a Quote</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
 
             {/* CTA tile */}

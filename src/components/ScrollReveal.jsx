@@ -5,12 +5,12 @@ export default function ScrollReveal() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
+            io.unobserve(entry.target)
           }
         })
       },
@@ -18,15 +18,32 @@ export default function ScrollReveal() {
     )
 
     const attach = () => {
-      document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => observer.observe(el))
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => io.observe(el))
     }
 
     attach()
     const t = setTimeout(attach, 200)
 
+    // Watch the DOM for any newly-added `.reveal` nodes (e.g. when a page
+    // filters a list, mounts a modal, or lazy-renders a section). Without
+    // this, nodes added after the initial attach stay at opacity: 0 forever.
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        m.addedNodes.forEach((node) => {
+          if (node.nodeType !== 1) return
+          if (node.classList?.contains('reveal') && !node.classList.contains('is-visible')) {
+            io.observe(node)
+          }
+          node.querySelectorAll?.('.reveal:not(.is-visible)').forEach((el) => io.observe(el))
+        })
+      }
+    })
+    mo.observe(document.body, { childList: true, subtree: true })
+
     return () => {
       clearTimeout(t)
-      observer.disconnect()
+      io.disconnect()
+      mo.disconnect()
     }
   }, [pathname])
 
