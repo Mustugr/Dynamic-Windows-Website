@@ -1,103 +1,137 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 
 const allProjects = [
   {
-    name: '500 Main Street',
-    location: 'New Jersey',
-    type: 'Curtain Wall',
-    year: '2023',
-    scope: '12-story commercial facade with unitized curtain wall system.',
+    name: '500 Main St',
+    location: 'New Rochelle, NY',
+    title: 'Modern Residential Tower Façade',
+    type: 'Residential Facade',
+    year: '2024',
+    description:
+      'This striking high-rise features sleek curtain walls, floor-to-ceiling windows, and custom metal panels — all installed by our expert team. From the street-level storefronts to the upper-level window systems, every detail was designed and delivered to elevate both the look and performance of this residential development.',
+    scope: ['Window Install', 'Storefront', 'Slab Covers'],
     img: '/assets/projects/500-main-st.webp',
-    category: 'curtain-wall',
+    category: 'facade',
   },
   {
-    name: '646 11th Avenue',
+    name: '646 11th Ave',
     location: 'New York, NY',
-    type: 'Curtain Wall System',
+    title: 'Urban Retail Podium & Mixed-Use Façade Upgrade',
+    type: 'Mixed-Use Facade',
     year: '2023',
-    scope: 'High-rise curtain wall installation in Midtown Manhattan.',
+    description:
+      'This dynamic corner property features a modernized retail base beneath a mixed-use structure of residences, offices, and commercial spaces. The redesigned street-level façade brings together clean lines, high-performance glass, and precision detailing — enhancing visibility, access, and architectural cohesion.',
+    scope: [],
     img: '/assets/projects/646-11th-ave.webp',
-    category: 'curtain-wall',
+    category: 'facade',
   },
   {
-    name: '26 Sharpe Avenue',
-    location: 'New Jersey',
+    name: '26 Sharpe Ave',
+    location: 'Staten Island, NY',
+    title: 'New World Prep Charter School — Custom Skylight',
     type: 'Skylight Roofing System',
     year: '2022',
-    scope: 'Custom skylight roofing with fire-rated glazing.',
+    description:
+      'At New World Prep Charter School, we engineered and installed a custom skylight roofing system designed to enhance natural lighting and create an inspiring educational environment. The structure features high-performance glazing panels, precision framing, and a geometrically complex layout — delivering both architectural appeal and long-term durability. From initial hoist to final seal, this project reflects our commitment to safe execution and detail-oriented craftsmanship.',
+    scope: ['Windows Installation', 'Panels Installation', 'Storefront Installation'],
     img: '/assets/projects/26-sharpe-ave.webp',
     category: 'skylights',
   },
   {
-    name: '1525 N American Street',
+    name: '1525 N American St',
     location: 'Philadelphia, PA',
-    type: 'Facade & Glazing',
+    title: 'GFRC Panel Façade',
+    type: 'GFRC Panel Facade',
     year: '2022',
-    scope: 'Full building envelope with metal panel accents.',
+    description:
+      'This modern mid-rise development in the heart of Philadelphia features a refined architectural envelope clad in GFRC (Glass Fiber Reinforced Concrete) panels. The team handled furnishing and installation of the custom façade system, providing a durable and visually consistent surface that works with the building’s contemporary design.',
+    scope: ['Furnish and Install GFRC Panels'],
     img: '/assets/projects/1525-n-american.webp',
     category: 'facade',
   },
   {
-    name: '413 Summit Avenue',
+    name: '413 Summit Ave',
     location: 'Jersey City, NJ',
-    type: 'Facades & Windows',
+    title: 'Façade Systems & Window Wall',
+    type: 'Window Wall System',
     year: '2023',
-    scope: 'Mixed-use high-rise facade and window systems.',
+    description:
+      'Situated in the growing Journal Square neighborhood, 413 Summit Avenue is a 19-story residential tower that will deliver 148 modern units, 4,900 square feet of retail space, and convenient access to transit via the nearby PATH station. The structure adds substantially to Jersey City’s developing urban landscape. Dynamic Windows System provided metal slab covers, installed windows, and constructed a complete window wall system to ensure a polished, long-lasting facade.',
+    scope: ['Metal Slab Covers Supply and Install', 'Window Installation', 'Window Wall Installation'],
     img: '/assets/projects/413-summit-ave.webp',
     category: 'facade',
   },
   {
     name: '885 Washington Blvd',
-    location: 'Jersey City, NJ',
-    type: 'Commercial Windows',
-    year: '2021',
-    scope: 'Thermally broken commercial window replacement.',
-    img: '/assets/projects/885-washington-blvd.webp',
-    category: 'windows',
-  },
-  {
-    name: '600 North Avenue',
-    location: 'New Jersey',
-    type: 'Storefront & Glazing',
+    location: 'Stamford, CT',
+    title: 'The Smyth — Curtain Wall Installation',
+    type: 'Curtain Wall',
     year: '2022',
-    scope: 'Retail storefront with all-glass entry system.',
-    img: '/assets/projects/600-north-ave.webp',
-    category: 'storefront',
+    description:
+      'The Smyth is a 16-story mixed-use development containing over 400 residential units and more than 19,000 square feet of retail space in downtown Stamford. Positioned near the city’s transit and entertainment centers, it represents a key initiative in urban revitalization. Dynamic Windows System was selected to execute the complete curtain wall installation, delivering a high-performance exterior that balances visual appeal with modern efficiency and durability standards.',
+    scope: ['Curtain Wall Installation'],
+    img: '/assets/projects/885-washington-blvd.webp',
+    category: 'curtain-wall',
   },
   {
-    name: '1 Nassau Street',
-    location: 'New York, NY',
-    type: 'Retail Glass & Framing',
+    name: '600 North Ave',
+    location: 'New Rochelle, NY',
+    title: 'Mixed-Use Residential & Retail Façade',
+    type: 'Curtain Wall & Storefront',
+    year: '2022',
+    description:
+      'This downtown New Rochelle development merges street-level retail with residential and community spaces above. The building’s modern design is complemented by transparent glazing and contemporary façade detailing. Dynamic Windows System installed the curtain wall system, provided laminated safety glass, and completed storefront work to create an efficient, visually prominent façade.',
+    scope: ['Curtain Wall Installation', 'Furnish and Install Laminated Glass', 'Furnish and Install Storefront'],
+    img: '/assets/projects/600-north-ave.webp',
+    category: 'curtain-wall',
+  },
+  {
+    name: '1 Nassau St',
+    location: 'Brooklyn, NY',
+    title: 'VITAL Brooklyn — Adaptive Reuse',
+    type: 'Adaptive Reuse · Retail',
     year: '2023',
-    scope: 'Landmark retail renovation with custom framing.',
+    description:
+      'This adaptive reuse project converted an industrial facility into VITAL Brooklyn, an indoor climbing gym and lifestyle destination. The work blends modern wellness architecture with Brooklyn’s industrial heritage, featuring expansive retail glazing, custom windows, and natural daylight enhancements.',
+    scope: ['Fire Rated Glazing', 'Glass', 'Skylight', 'Furnish and Install Waterproofing', 'Fabricate and Install Windows', 'Fabricate and Install Storefront'],
     img: '/assets/projects/1-nassau-st.webp',
     category: 'storefront',
   },
   {
     name: '30 Park Lane — The Wave',
-    location: 'New Jersey',
-    type: 'Curtain Wall System',
+    location: 'Jersey City, NJ',
+    title: 'Luxury Waterfront Residential Tower — The Wave',
+    type: 'Glass Railings · Windows',
     year: '2024',
-    scope: 'Signature curved curtain wall for luxury residences.',
+    description:
+      'Located in the prestigious Newport neighborhood, The Wave is a modern high-rise residential tower offering panoramic waterfront views of Manhattan. The building features specialized glazing and balcony systems that contribute to both its visual appeal and resident comfort.',
+    scope: ['Glass Railings', 'Window Install', 'Balcony Doors Install', 'Balcony Dividers'],
     img: '/assets/projects/30-park-lane.webp',
     category: 'curtain-wall',
   },
   {
     name: 'Great Wolf Lodge',
-    location: 'Multi-State',
-    type: 'Commercial Facade',
+    location: 'Norwich, CT',
+    title: 'Family Resort & Waterpark Glazing Systems',
+    type: 'Resort Glazing',
     year: '2022',
-    scope: 'Hospitality facade systems across multiple properties.',
+    description:
+      'This project involved delivering glazing solutions for a large-scale indoor waterpark and resort destination in eastern Connecticut. Dynamic Windows System provided durable and high-efficiency glazing solutions suitable for both wet environments and guest room comfort.',
+    scope: ['Waterpark — Window Installation', 'Resort / Hotel — Window Installation'],
     img: '/assets/projects/great-wolf-lodge.webp',
-    category: 'facade',
+    category: 'windows',
   },
   {
-    name: '345 Baldwin Avenue',
+    name: '345 Baldwin Ave',
     location: 'Jersey City, NJ',
-    type: 'Metal Panel & Windows',
+    title: 'Mid-Rise Residential Tower Glazing',
+    type: 'Residential Glazing',
     year: '2023',
-    scope: 'Aluminum composite panels with integrated window systems.',
+    description:
+      'Located in the heart of Jersey City, 345 Baldwin Avenue is a modern residential high-rise designed to deliver urban comfort with sleek architectural appeal.',
+    scope: ['Window Install', 'Storefront', 'Slab Covers'],
     img: '/assets/projects/345-baldwin-ave.webp',
     category: 'facade',
   },
@@ -118,13 +152,19 @@ export default function ProjectsPage() {
 
   const filtered = active === 'all' ? allProjects : allProjects.filter((p) => p.category === active)
 
+  // Lock scroll + ESC-to-close while the lightbox is open.
   useEffect(() => {
-    if (lightbox) {
-      document.body.style.overflow = 'hidden'
-    } else {
+    if (!lightbox) {
       document.body.style.overflow = ''
+      return
     }
-    return () => { document.body.style.overflow = '' }
+    document.body.style.overflow = 'hidden'
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKey)
+    }
   }, [lightbox])
 
   return (
@@ -241,54 +281,99 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Lightbox */}
-      {lightbox && (
+      {/* Lightbox — portaled to <body> so it escapes the PageTransition
+          ancestor's transform (which would otherwise scope `position: fixed`
+          to the page wrapper and push the modal behind the navbar). */}
+      {lightbox && createPortal(
         <div
-          className="fixed inset-0 z-[70] bg-ink-950/95 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-[100] bg-ink-950/92 backdrop-blur-xl animate-fade-in overflow-y-auto overscroll-contain"
           onClick={() => setLightbox(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.title || lightbox.name}
         >
+          {/* Close button — fixed so it stays visible regardless of scroll */}
           <button
-            className="absolute top-6 right-6 w-12 h-12 border border-white/20 hover:border-orange hover:bg-orange flex items-center justify-center text-white transition-all duration-300"
-            onClick={() => setLightbox(null)}
+            className="fixed top-5 right-5 md:top-6 md:right-6 z-[110] w-11 h-11 md:w-12 md:h-12 bg-ink-950/90 border border-white/25 hover:border-orange hover:bg-orange flex items-center justify-center text-white transition-all duration-300 shadow-2xl"
+            onClick={(e) => { e.stopPropagation(); setLightbox(null) }}
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          <div
-            className="max-w-5xl w-full animate-scale-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative">
-              <img
-                src={lightbox.img}
-                alt={lightbox.name}
-                className="w-full max-h-[70vh] object-contain"
-              />
-            </div>
-            <div className="mt-6 px-2 grid md:grid-cols-[1fr_auto] gap-6 items-end">
-              <div>
-                <div className="text-orange text-[10px] tracking-[0.3em] uppercase font-mono mb-2">
-                  {lightbox.year} · {lightbox.type}
+          {/* Vertically centered on large screens, naturally flows on small */}
+          <div className="min-h-full flex items-center justify-center p-4 md:p-8">
+            <div
+              className="relative w-full max-w-6xl animate-scale-in my-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="grid md:grid-cols-[1.1fr_1fr] gap-0 bg-ink-900 border border-ink-700">
+                {/* Image */}
+                <div className="relative bg-ink-950 aspect-[4/3] md:aspect-auto md:min-h-full">
+                  <img
+                    src={lightbox.img}
+                    alt={lightbox.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 left-4 bg-ink-950/85 backdrop-blur-sm px-3 py-1 border border-white/10">
+                    <span className="text-orange text-[10px] tracking-[0.25em] uppercase font-mono">{lightbox.year}</span>
+                  </div>
                 </div>
-                <h3 className="font-heading text-4xl md:text-5xl text-white mb-2">{lightbox.name}</h3>
-                <p className="text-white/60 text-sm mb-3 flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  {lightbox.location}
-                </p>
-                <p className="text-white/70 text-sm max-w-xl leading-relaxed">{lightbox.scope}</p>
+
+                {/* Details */}
+                <div className="p-6 sm:p-8 md:p-10 flex flex-col">
+                  <div className="text-orange text-[10px] tracking-[0.3em] uppercase font-mono mb-4">
+                    {lightbox.type}
+                  </div>
+                  {lightbox.title && (
+                    <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white leading-tight mb-3">
+                      {lightbox.title}
+                    </h3>
+                  )}
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pb-5 mb-5 border-b border-ink-700 text-white/60 text-xs tracking-wider uppercase">
+                    <span>{lightbox.name}</span>
+                    <span className="flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {lightbox.location}
+                    </span>
+                  </div>
+
+                  <p className="text-white/70 text-sm leading-relaxed mb-6">
+                    {lightbox.description}
+                  </p>
+
+                  {lightbox.scope && lightbox.scope.length > 0 && (
+                    <div className="mb-8">
+                      <div className="section-label mb-4">Scope of Work</div>
+                      <ul className="space-y-2.5">
+                        {lightbox.scope.map((item) => (
+                          <li key={item} className="flex items-start gap-3 text-white/80 text-sm">
+                            <span className="mt-1.5 w-1.5 h-1.5 bg-orange flex-shrink-0" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <Link
+                    to="/contact"
+                    onClick={() => setLightbox(null)}
+                    className="btn-primary mt-auto self-start"
+                  >
+                    Start a Similar Project →
+                  </Link>
+                </div>
               </div>
-              <Link to="/contact" onClick={() => setLightbox(null)} className="btn-primary">
-                Start a Similar Project →
-              </Link>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Bottom CTA */}
