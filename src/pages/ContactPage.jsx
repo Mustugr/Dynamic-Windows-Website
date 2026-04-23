@@ -71,6 +71,12 @@ export default function ContactPage() {
     setSubmitting(true)
     setError('')
 
+    if (!supabase) {
+      setSubmitting(false)
+      setError("Form is temporarily unavailable — please email us directly.")
+      return
+    }
+
     const { error: insertError } = await supabase
       .from('contact_submissions')
       .insert({
