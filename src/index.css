@@ -371,6 +371,17 @@
 }
 .la-meta-tl { top: 0; left: 0; animation-delay: 0.35s; }
 .la-meta-tr { top: 0; right: 0; text-align: right; animation-delay: 0.45s; }
+
+/* Phones — corner readouts collide in narrow portrait. Drop the right-side
+   meta + elevation counter, tighten everything else. */
+@media (max-width: 640px) {
+  .la-meta { padding: 20px 22px; font-size: 9px; letter-spacing: 0.18em; }
+  .la-meta-tr { display: none; }
+  .la-meta-sub { font-size: 8px; letter-spacing: 0.18em; }
+  .la-counter { display: none; }
+  .la-status { bottom: 92px; font-size: 9px; letter-spacing: 0.25em; }
+  .la-progress { left: 22px; right: 22px; bottom: 24px; }
+}
 .la-meta-row {
   color: #F07A10;
   display: flex;

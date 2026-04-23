@@ -32,7 +32,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-20 pb-52 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-20 pb-16 md:pb-52 w-full">
         <div className="grid lg:grid-cols-[1.3fr_1fr] gap-12 items-center">
           {/* Left: copy */}
           <div>
@@ -78,8 +78,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Stats bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-ink-950/80 backdrop-blur-md">
+      {/* Stats bar — flows inline on mobile so it doesn't overlap the CTA
+          buttons, absolute-pinned to the bottom of the hero on md+ screens
+          where there's room. */}
+      <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 border-t border-white/10 bg-ink-950/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {[
