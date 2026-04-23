@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 const serviceOptions = [
   'Curtain Wall & Storefront',
@@ -60,11 +61,33 @@ const contactCards = [
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', company: '', service: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmitting(true)
+    setError('')
+
+    const { error: insertError } = await supabase
+      .from('contact_submissions')
+      .insert({
+        name: form.name,
+        email: form.email,
+        phone: form.phone || null,
+        company: form.company || null,
+        service: form.service || null,
+        message: form.message,
+      })
+
+    setSubmitting(false)
+
+    if (insertError) {
+      setError("Couldn't send your message — please try again or email us directly.")
+      return
+    }
     setSubmitted(true)
   }
 
@@ -230,8 +253,18 @@ export default function ContactPage() {
                     </label>
                   </div>
 
-                  <button type="submit" className="btn-primary w-full text-center">
-                    Send Message →
+                  {error && (
+                    <p className="text-red-400 text-sm border border-red-400/40 bg-red-400/5 px-4 py-3">
+                      {error}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary w-full text-center disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? 'Sending…' : 'Send Message →'}
                   </button>
                 </form>
               )}
